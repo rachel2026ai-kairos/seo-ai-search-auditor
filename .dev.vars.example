@@ -1,3 +1,4 @@
 NEXTJS_ENV=development
-GOOGLE_GENERATIVE_AI_KEY=
 AI_PROVIDER=gemini
+# 可稍後再填；未填時分析仍會跑，僅無 AI 質化段落
+GOOGLE_GENERATIVE_AI_KEY=
