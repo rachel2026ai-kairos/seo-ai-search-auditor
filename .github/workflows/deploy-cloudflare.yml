@@ -1,0 +1,33 @@
+# 在 GitHub Actions（Linux）上建置 OpenNext，避開 Windows 路徑／工具鏈問題。
+# 需在 Repository secrets 設定：CLOUDFLARE_API_TOKEN（Workers 編輯權限）
+name: Deploy Cloudflare Workers (OpenNext)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, master]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Build OpenNext for Cloudflare
+        env:
+          NODE_OPTIONS: --max-old-space-size=8192
+        run: npm run cf:build
+
+      - name: Deploy to Cloudflare
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: npx opennextjs-cloudflare deploy
