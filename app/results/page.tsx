@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState, Suspense } from 'react'
+import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import AnalysisLoader from '@/components/AnalysisLoader'
 import ScoreGauge from '@/components/ScoreGauge'
@@ -35,7 +36,7 @@ function Results() {
         <div className="text-center space-y-4">
           <div className="text-4xl">⚠️</div>
           <p className="text-white/70">{error}</p>
-          <a href="/" className="text-blue-400 hover:underline text-sm">← 返回首頁</a>
+          <Link href="/" className="text-blue-400 hover:underline text-sm">← 返回首頁</Link>
         </div>
       </div>
     )
@@ -55,7 +56,7 @@ function Results() {
 
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div className="min-w-0 flex-1">
-            <a href="/" className="text-blue-400 text-sm hover:underline">← 重新分析</a>
+            <Link href="/" className="text-blue-400 text-sm hover:underline">← 重新分析</Link>
             <h1 className="text-lg sm:text-xl font-bold text-white/90 mt-2 break-all">{report.url}</h1>
             <p className="text-white/40 text-xs mt-1">
               {report.fromCache ? '📦 快取結果' : '🔍 即時分析'} ·
