@@ -30,7 +30,7 @@ jobs:
 
       # 僅在 Repository 已設定 CLOUDFLARE_API_TOKEN 時部署；未設定則略過（workflow 仍為成功）
       - name: Deploy to Cloudflare
-        if: ${{ secrets.CLOUDFLARE_API_TOKEN != '' }}
+        if: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         run: npx opennextjs-cloudflare deploy
