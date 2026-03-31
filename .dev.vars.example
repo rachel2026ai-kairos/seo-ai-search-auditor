@@ -1,4 +1,5 @@
 NEXTJS_ENV=development
 AI_PROVIDER=gemini
-# 可稍後再填；未填時分析仍會跑，僅無 AI 質化段落
+# 僅本機預覽；上線請在 Cloudflare Worker「Secrets」設定（勿提交 .dev.vars）
 GOOGLE_GENERATIVE_AI_KEY=
+OPENAI_API_KEY=

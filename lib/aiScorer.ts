@@ -1,4 +1,5 @@
 import { CleanContext, AIScoreResult } from './types'
+import { getAiProvider, getGoogleGenerativeAiKey, getOpenAIApiKey } from './env.server'
 
 const SYSTEM_PROMPT = `You are an Elite SEO Auditor specializing in 2026 Google E-E-A-T and GEO (Generative Engine Optimization) for AI search engines including ChatGPT Search, Perplexity, and Google AI Overview.
 
@@ -62,11 +63,11 @@ function parseAIJson(text: string): AIScoreResult {
 }
 
 export async function runAIScorer(ctx: CleanContext): Promise<AIScoreResult> {
-  const provider = process.env.AI_PROVIDER || 'openai'
+  const provider = getAiProvider()
 
   if (provider === 'openai') {
     const { default: OpenAI } = await import('openai')
-    const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+    const client = new OpenAI({ apiKey: getOpenAIApiKey() })
     const response = await client.chat.completions.create({
       model: 'gpt-4o-mini',
       max_tokens: 800,
@@ -82,7 +83,7 @@ export async function runAIScorer(ctx: CleanContext): Promise<AIScoreResult> {
 
   if (provider === 'gemini') {
     const { GoogleGenerativeAI } = await import('@google/generative-ai')
-    const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GENERATIVE_AI_KEY || '')
+    const genAI = new GoogleGenerativeAI(getGoogleGenerativeAiKey() || '')
     const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
     const result = await model.generateContent(
       `${SYSTEM_PROMPT}\n\n${buildUserPrompt(ctx)}`
