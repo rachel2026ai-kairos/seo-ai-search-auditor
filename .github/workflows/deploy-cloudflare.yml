@@ -1,6 +1,6 @@
 # 在 GitHub Actions（Linux）上建置 OpenNext。
-# CLOUDFLARE_API_TOKEN：選填；未設定時只驗證建置、略過 wrangler deploy。
-# GOOGLE_GENERATIVE_AI_KEY：在 Cloudflare Worker「變數 / Secrets」稍後補即可，不影響 CI。
+# CLOUDFLARE_API_TOKEN：選填；未設定時略過 wrangler deploy（建置仍會跑）。
+# GOOGLE_GENERATIVE_AI_KEY：在 Cloudflare Worker 稍後補即可，不影響 CI。
 name: Deploy Cloudflare Workers (OpenNext)
 
 on:
@@ -28,9 +28,13 @@ jobs:
           NODE_OPTIONS: --max-old-space-size=8192
         run: npm run cf:build
 
-      # 僅在 Repository 已設定 CLOUDFLARE_API_TOKEN 時部署；未設定則略過（workflow 仍為成功）
-      - name: Deploy to Cloudflare
-        if: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      - name: Deploy to Cloudflare（若已設定 CLOUDFLARE_API_TOKEN）
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-        run: npx opennextjs-cloudflare deploy
+        run: |
+          if [ -z "${CLOUDFLARE_API_TOKEN:-}" ]; then
+            echo "::notice::已略過部署：請在 Repository secrets 新增 CLOUDFLARE_API_TOKEN 後再執行。"
+            echo "::notice::Gemini（GOOGLE_GENERATIVE_AI_KEY）請在 Cloudflare Worker 變數稍後補。"
+            exit 0
+          fi
+          npx opennextjs-cloudflare deploy
