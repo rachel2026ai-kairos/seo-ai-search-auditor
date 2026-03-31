@@ -10,7 +10,8 @@
     "cf:build": "opennextjs-cloudflare build",
     "cf:preview": "opennextjs-cloudflare build && wrangler dev",
     "cf:deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
-    "deploy": "npm run cf:deploy"
+    "deploy": "npm run cf:deploy",
+    "deploy:win": "powershell -ExecutionPolicy Bypass -File ./scripts/deploy-windows.ps1"
   },
   "dependencies": {
     "@google/generative-ai": "^0.21.0",
